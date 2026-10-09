@@ -47,7 +47,6 @@
   }
   .wrap{position:relative;z-index:2;max-width:1150px;margin:0 auto;padding:0 24px}
 
-  /* GATE */
   .gate{
     position:fixed; inset:0; z-index:200;
     display:none; align-items:center; justify-content:center;
@@ -75,7 +74,6 @@
     margin-bottom:30px; font-family:'Orbitron',sans-serif;
   }
 
-  /* NAV */
   nav{
     position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);background:rgba(4,6,12,.65);
@@ -108,7 +106,6 @@
   .user-chip .out:hover{color:#ff4d6d}
   @media(max-width:820px){.nav-links{display:none}}
 
-  /* PAGES */
   .page{display:none;animation:fade .35s ease}
   .page.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(8px)}}
@@ -179,7 +176,6 @@
   }
   .card.link:hover::after{opacity:1;transform:translateX(6px);text-shadow:0 0 12px var(--cyan)}
 
-  /* GALLERY */
   .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
   .shot{
     position:relative;aspect-ratio:16/10;overflow:hidden;border:1px solid var(--line);
@@ -202,7 +198,6 @@
   }
   .shot:hover .cap::after{opacity:1;text-shadow:0 0 12px var(--cyan)}
 
-  /* CLIPS */
   .clip-section{margin-bottom:56px}
   .clip-section h3{
     font-family:'Orbitron',sans-serif;font-size:1rem;letter-spacing:.2em;
@@ -220,7 +215,6 @@
   .clip .meta h4{font-family:'Orbitron',sans-serif;font-size:.78rem;letter-spacing:.12em;color:#dff6ff}
   .clip .meta span{font-size:.78rem;color:var(--cyan);letter-spacing:.1em}
 
-  /* PRICING */
   .price-card{
     max-width:420px;margin:0 auto;text-align:center;padding:44px 32px;
     background:linear-gradient(180deg,rgba(0,240,255,.09),rgba(122,92,255,.06));
@@ -236,7 +230,6 @@
   .perks li{padding:7px 0;color:#a8c6d6;font-weight:600}
   .perks li::before{content:"▸ ";color:var(--cyan)}
 
-  /* MODALS */
   .overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;
     background:rgba(2,4,8,.82);backdrop-filter:blur(6px);padding:20px;overflow-y:auto}
   .overlay.on{display:flex}
@@ -288,7 +281,6 @@
     border-left-color:#ff4d6d;color:#ffb3c0;
   }
 
-  /* TOKEN BOX */
   .token-box{
     margin:20px 0 6px;
     padding:20px 18px;
@@ -314,7 +306,6 @@
     margin-top:12px;
   }
 
-  /* EMPTY TOKEN STATE */
   .token-empty{
     padding:26px 18px;text-align:center;
     background:rgba(255,77,109,.06);
@@ -324,7 +315,6 @@
   }
   .token-empty .big{font-size:1.6rem;display:block;margin-bottom:8px}
 
-  /* TOKEN MODAL ACTIONS */
   .token-actions{
     display:flex;gap:10px;margin-top:14px;
   }
@@ -332,7 +322,6 @@
     flex:1;padding:13px 14px;font-size:.68rem;letter-spacing:.12em;
   }
 
-  /* LIGHTBOX */
   .lightbox{
     position:fixed;inset:0;z-index:100;display:none;
     align-items:center;justify-content:center;
@@ -400,7 +389,6 @@
 </head>
 <body>
 
-<!-- GATE -->
 <div class="gate on" id="gate">
   <div class="gate-card">
     <div class="gate-logo">AURA</div>
@@ -436,19 +424,10 @@
 
     <div id="auStep3" style="display:none;text-align:center">
       <div class="ok">✔</div>
-      <h3>ACCESS GRANTED</h3>
+      <h3>ACCOUNT CREATED</h3>
       <p class="hint">Welcome, <b id="auDoneEmail" style="color:var(--cyan)"></b></p>
-
-      <div class="token-box">
-        <div class="token-label">YOUR CLIENT TOKEN</div>
-        <div class="token-value" id="doneToken">—</div>
-        <button class="btn sm full" id="copyTokenBtn" type="button">Copy Token</button>
-        <div class="token-hint">
-          Save this token — you'll need it to log in to the Aura Client.
-        </div>
-      </div>
-
-      <button class="btn full" id="enterSiteBtn" type="button" style="margin-top:16px">Enter Aura Client</button>
+      <p class="hint">Purchase Aura Client to receive your login token.</p>
+      <button class="btn full" id="enterSiteBtn" type="button">Continue</button>
     </div>
 
     <div id="auLogin" style="display:none">
@@ -631,7 +610,7 @@
   </div>
 </footer>
 
-</div><!-- /#app -->
+</div>
 
 <div class="overlay" id="overlay">
   <div class="modal">
@@ -654,13 +633,20 @@
       <div class="ok">✔</div>
       <h3>PURCHASE COMPLETE</h3>
       <p class="hint">Thanks! Your download is ready.</p>
-      <a class="btn full" id="downloadBtn" href="#" download style="display:block">Download .jar</a>
+
+      <div class="token-box">
+        <div class="token-label">YOUR CLIENT TOKEN</div>
+        <div class="token-value" id="modalToken">—</div>
+        <button class="btn sm full" id="copyTokenModalBtn" type="button">Copy Token</button>
+        <div class="token-hint">Save this token — you'll need it to log in to the Aura Client.</div>
+      </div>
+
+      <a class="btn full" id="downloadBtn" href="#" download style="display:block;margin-top:14px">Download .jar</a>
       <button class="close" id="closeBtn" type="button">Close</button>
     </div>
   </div>
 </div>
 
-<!-- TOKEN MODAL -->
 <div class="overlay" id="tokenOverlay">
   <div class="modal">
     <h3>YOUR CLIENT TOKEN</h3>
@@ -669,16 +655,11 @@
     <div id="tokenHasState">
       <div class="token-box">
         <div class="token-label">TOKEN</div>
-        <div class="token-value" id="modalToken">—</div>
+        <div class="token-value" id="modalTokenView">—</div>
       </div>
 
       <div class="token-actions">
-        <button class="btn sm" id="copyTokenModalBtn" type="button">Copy</button>
-        <button class="btn sm danger" id="resetTokenBtn" type="button">Reset Token</button>
-      </div>
-
-      <div class="info-box warn" id="resetWarning" style="display:none;margin-top:16px">
-        ⚠ Resetting your token will invalidate the old one. The Aura Client will need the new token to log in.
+        <button class="btn sm" id="copyTokenBtn2" type="button">Copy</button>
       </div>
 
       <div class="info-box" style="margin-top:16px">
@@ -691,13 +672,10 @@
         <span class="big">🔒</span>
         You don't have a token yet.<br>
         <span style="color:#7f9caf;font-size:.85rem">
-          Tokens are issued automatically when you sign up. If you're logged in but see this, log out and sign up again.
+          Purchase Aura Client to receive your login token.
         </span>
       </div>
-
-      <div class="token-actions">
-        <button class="btn sm" id="generateTokenBtn" type="button">Generate Token</button>
-      </div>
+      <button class="btn sm full" id="goBuyBtn" type="button">Buy Now</button>
     </div>
 
     <button class="close" id="closeTokenBtn" type="button">Close</button>
@@ -722,9 +700,6 @@
 </div>
 
 <script>
-/* ============================================================
-   CONFIG
-   ============================================================ */
 const CONFIG = {
   jarPath: "Aura-Client.jar",
   downloadName: "Aura-Client.jar",
@@ -733,9 +708,6 @@ const CONFIG = {
   currencyPos: "after"
 };
 
-/* ============================================================
-   EMAILJS
-   ============================================================ */
 const EMAILJS_SERVICE_ID  = "service_mpasfvr";
 const EMAILJS_TEMPLATE_ID = "template_0bdwfc4";
 const EMAILJS_PUBLIC_KEY  = "NoDcpRHMHATa-MtxZ";
@@ -755,9 +727,6 @@ if (EMAIL_MODE === "real" && typeof emailjs !== "undefined") {
   catch(e){ console.error("EmailJS init failed:", e); }
 }
 
-/* ============================================================
-   ACCOUNTS
-   ============================================================ */
 const STORE_KEY = "aura_accounts";
 const SESSION_KEY = "aura_session";
 
@@ -786,9 +755,6 @@ function refreshUserChip(){
   }
 }
 
-/* ------------------------------------------------------------
-   TOKEN GENERATOR — XXX.XXXXXXX.XXXXXXXXX
-   ------------------------------------------------------------ */
 function generateToken(){
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   function randInt(max){
@@ -807,14 +773,8 @@ function generateToken(){
   return randSegment(len1) + "." + randSegment(len2) + "." + randSegment(len3);
 }
 
-/* ============================================================
-   EMAIL VALIDATION
-   ============================================================ */
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-/* ============================================================
-   GATE / AUTH
-   ============================================================ */
 const gate       = document.getElementById("gate");
 const app        = document.getElementById("app");
 const auStep1    = document.getElementById("auStep1");
@@ -827,7 +787,6 @@ const tabLogin   = document.getElementById("tabLogin");
 let pendingEmail = "";
 let pendingCode  = "";
 let resendTimer  = null;
-let resetConfirmPending = false;
 
 function showGate(){
   gate.classList.add("on");
@@ -857,7 +816,6 @@ function clearMsgs(){
   });
 }
 
-/* ---------- SEND CODE ---------- */
 async function sendCode(){
   clearMsgs();
   const email = document.getElementById("auEmail").value.trim();
@@ -975,7 +933,6 @@ async function resendCode(){
   setTimeout(() => { msg.textContent = ""; msg.style.color = "#ff4d6d"; }, 2500);
 }
 
-/* ---------- VERIFY ---------- */
 function verifyCode(){
   const input = document.getElementById("auCode").value.trim();
   const msg = document.getElementById("auCodeMsg");
@@ -993,27 +950,23 @@ function verifyCode(){
     return;
   }
 
-  const pass  = document.getElementById("auPass").value;
-  const token = generateToken();
-
+  const pass = document.getElementById("auPass").value;
   const accounts = getAccounts();
   accounts[pendingEmail.toLowerCase()] = {
     email: pendingEmail,
     pass,
-    token,
+    token: null,
+    purchased: false,
     created: Date.now()
   };
   saveAccounts(accounts);
   setSession(pendingEmail);
 
   document.getElementById("auDoneEmail").textContent = pendingEmail;
-  document.getElementById("doneToken").textContent   = token;
-
   auStep2.style.display = "none";
   auStep3.style.display = "block";
 }
 
-/* ---------- LOGIN ---------- */
 function doLogin(){
   const email = document.getElementById("liEmail").value.trim();
   const pass  = document.getElementById("liPass").value;
@@ -1043,19 +996,14 @@ function doLogin(){
 
   setSession(acc.email);
   hideGate();
-  setTimeout(() => showTokenModal(), 400);
 }
 
-/* ---------- LOGOUT ---------- */
 function logout(){
   clearSession();
   showGate();
   switchAuth("login");
 }
 
-/* ============================================================
-   TOKEN MODAL
-   ============================================================ */
 function showTokenModal(){
   const hasState = document.getElementById("tokenHasState");
   const emptyState = document.getElementById("tokenEmptyState");
@@ -1074,13 +1022,7 @@ function showTokenModal(){
     hasState.style.display = "block";
     emptyState.style.display = "none";
     subtitle.textContent = "Use this token to log in to the Aura Client.";
-    document.getElementById("modalToken").textContent = token;
-
-    document.getElementById("resetWarning").style.display = "none";
-    resetConfirmPending = false;
-    const resetBtn = document.getElementById("resetTokenBtn");
-    resetBtn.textContent = "Reset Token";
-    resetBtn.classList.add("danger");
+    document.getElementById("modalTokenView").textContent = token;
   } else {
     hasState.style.display = "none";
     emptyState.style.display = "block";
@@ -1091,68 +1033,8 @@ function showTokenModal(){
 }
 function closeTokenModal(){
   document.getElementById("tokenOverlay").classList.remove("on");
-  resetConfirmPending = false;
 }
 
-/* ---------- RESET TOKEN ---------- */
-function resetToken(){
-  const email = getSession();
-  if (!email){
-    alert("Please log in first.");
-    return;
-  }
-  const accounts = getAccounts();
-  const acc = accounts[email.toLowerCase()];
-  if (!acc) return;
-
-  if (!resetConfirmPending){
-    resetConfirmPending = true;
-    document.getElementById("resetWarning").style.display = "block";
-    document.getElementById("resetTokenBtn").textContent = "Confirm Reset";
-    return;
-  }
-
-  const newToken = generateToken();
-  acc.token = newToken;
-  saveAccounts(accounts);
-
-  document.getElementById("modalToken").textContent = newToken;
-  document.getElementById("resetWarning").style.display = "none";
-  resetConfirmPending = false;
-
-  const resetBtn = document.getElementById("resetTokenBtn");
-  resetBtn.textContent = "✓ Reset!";
-  resetBtn.classList.remove("danger");
-  setTimeout(() => {
-    resetBtn.textContent = "Reset Token";
-    resetBtn.classList.add("danger");
-  }, 1400);
-
-  const box = document.getElementById("modalToken");
-  box.style.transition = "box-shadow .3s";
-  box.style.boxShadow = "0 0 24px var(--cyan)";
-  setTimeout(() => { box.style.boxShadow = ""; }, 600);
-}
-
-/* ---------- GENERATE TOKEN (empty state) ---------- */
-function generateTokenForMe(){
-  const email = getSession();
-  if (!email){
-    closeTokenModal();
-    showGate();
-    return;
-  }
-  const accounts = getAccounts();
-  const acc = accounts[email.toLowerCase()];
-  if (!acc) return;
-
-  const newToken = generateToken();
-  acc.token = newToken;
-  saveAccounts(accounts);
-  showTokenModal();
-}
-
-/* ---------- COPY TOKEN ---------- */
 function copyToken(){
   const email = getSession();
   if (!email) return;
@@ -1162,7 +1044,6 @@ function copyToken(){
     alert("You don't have a token yet.");
     return;
   }
-
   const text = acc.token;
   if (navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text).then(() => flashCopy()).catch(() => fallbackCopy(text));
@@ -1182,7 +1063,7 @@ function fallbackCopy(text){
   flashCopy();
 }
 function flashCopy(){
-  const ids = ["copyTokenBtn","copyTokenModalBtn"];
+  const ids = ["copyTokenModalBtn","copyTokenBtn2"];
   ids.forEach(id => {
     const b = document.getElementById(id);
     if (!b) return;
@@ -1192,9 +1073,6 @@ function flashCopy(){
   });
 }
 
-/* ============================================================
-   PAGE NAV
-   ============================================================ */
 function go(pageId){
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   const target = document.getElementById("page-" + pageId);
@@ -1209,9 +1087,6 @@ function go(pageId){
   closeLightbox();
 }
 
-/* ============================================================
-   CHECKOUT
-   ============================================================ */
 const overlay  = document.getElementById("overlay");
 const stepForm = document.getElementById("stepForm");
 const stepLoad = document.getElementById("stepLoad");
@@ -1236,15 +1111,27 @@ document.getElementById("payBtn").addEventListener("click", () => {
   setTimeout(() => {
     stepLoad.style.display = "none";
     stepDone.style.display = "block";
+
+    const email = getSession();
+    if (email){
+      const accounts = getAccounts();
+      const acc = accounts[email.toLowerCase()];
+      if (acc){
+        if (!acc.token){
+          acc.token = generateToken();
+        }
+        acc.purchased = true;
+        saveAccounts(accounts);
+        document.getElementById("modalToken").textContent = acc.token;
+      }
+    }
+
     const btn = document.getElementById("downloadBtn");
     btn.href = CONFIG.jarPath;
     btn.setAttribute("download", CONFIG.downloadName);
   }, 1600);
 });
 
-/* ============================================================
-   LIGHTBOX
-   ============================================================ */
 const lightbox   = document.getElementById("lightbox");
 const lbContent  = document.getElementById("lbContent");
 const lbCaption  = document.getElementById("lbCaption");
@@ -1322,9 +1209,6 @@ lbPrev.addEventListener("click", e => { e.stopPropagation(); lbPrevItem(); });
 lbNext.addEventListener("click", e => { e.stopPropagation(); lbNextItem(); });
 lightbox.addEventListener("click", e => { if (e.target === lightbox) closeLightbox(); });
 
-/* ============================================================
-   WIRE UP BUTTONS
-   ============================================================ */
 function $(id){ return document.getElementById(id); }
 
 tabSignup.addEventListener("click", () => switchAuth("signup"));
@@ -1342,13 +1226,12 @@ $("enterSiteBtn").addEventListener("click", hideGate);
 $("loginBtn").addEventListener("click", doLogin);
 $("logoutBtn").addEventListener("click", logout);
 
-$("copyTokenBtn").addEventListener("click", copyToken);
 $("copyTokenModalBtn").addEventListener("click", copyToken);
-$("resetTokenBtn").addEventListener("click", resetToken);
-$("generateTokenBtn").addEventListener("click", generateTokenForMe);
+$("copyTokenBtn2").addEventListener("click", copyToken);
 $("showTokenBtn").addEventListener("click", showTokenModal);
 $("showTokenHomeBtn").addEventListener("click", showTokenModal);
 $("closeTokenBtn").addEventListener("click", closeTokenModal);
+$("goBuyBtn").addEventListener("click", () => { closeTokenModal(); openCheckout(); });
 $("tokenOverlay").addEventListener("click", e => {
   if (e.target === $("tokenOverlay")) closeTokenModal();
 });
@@ -1387,9 +1270,6 @@ document.querySelectorAll("#gameplayGrid .clip, #showcaseGrid .clip").forEach(cl
     openLightbox({ type: "video", src: vid.getAttribute("src") }); });
 });
 
-/* ============================================================
-   KEYBOARD
-   ============================================================ */
 document.addEventListener("keydown", e => {
   if (lightbox.classList.contains("on")){
     if (e.key === "Escape") closeLightbox();
@@ -1414,9 +1294,6 @@ document.addEventListener("keydown", e => {
   }
 });
 
-/* ============================================================
-   COPYRIGHT PROTECTION
-   ============================================================ */
 document.addEventListener("contextmenu", e => e.preventDefault());
 document.addEventListener("copy", e => {
   const tag = (e.target.tagName || "").toLowerCase();
@@ -1461,12 +1338,7 @@ try {
 })();
 console.log("%c© 2026 Aura Client — All rights reserved. Author: Raptor1757",
             "color:#00f0ff;font-size:14px;font-weight:bold;");
-console.log("%cUnauthorized copying, reproduction or distribution of this site or the Aura Client software is prohibited.",
-            "color:#ff4d6d;font-size:12px;");
 
-/* ============================================================
-   INIT
-   ============================================================ */
 refreshUserChip();
 if (getSession()){
   hideGate();
