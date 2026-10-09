@@ -713,6 +713,9 @@ const EMAILJS_TEMPLATE_ID = "template_0bdwfc4";
 const EMAILJS_PUBLIC_KEY  = "NoDcpRHMHATa-MtxZ";
 const EMAIL_MODE = "real";
 
+const SUPABASE_URL  = "https://tkdiwdywukvwvgerzhxh.supabase.co";
+const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrZGl3ZHl3dWt2d3ZnZXJ6aHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NzE3NDAsImV4cCI6MjEwNzE0Nzc0MH0.iLutB8PaS9U0SWAwzSqUwa2rA6rAWxodybAAlGaZXJA";
+
 document.getElementById("priceLabel").innerHTML =
   CONFIG.currencyPos === "before"
     ? CONFIG.currency + CONFIG.price
@@ -1105,31 +1108,50 @@ function openCheckout(){
 function closeCheckout(){ overlay.classList.remove("on"); }
 overlay.addEventListener("click", e => { if (e.target === overlay) closeCheckout(); });
 
-document.getElementById("payBtn").addEventListener("click", () => {
+document.getElementById("payBtn").addEventListener("click", async () => {
   stepForm.style.display = "none";
   stepLoad.style.display = "block";
-  setTimeout(() => {
-    stepLoad.style.display = "none";
-    stepDone.style.display = "block";
 
-    const email = getSession();
-    if (email){
-      const accounts = getAccounts();
-      const acc = accounts[email.toLowerCase()];
-      if (acc){
-        if (!acc.token){
-          acc.token = generateToken();
-        }
-        acc.purchased = true;
-        saveAccounts(accounts);
-        document.getElementById("modalToken").textContent = acc.token;
-      }
+  const email = getSession();
+  const accounts = getAccounts();
+  const acc = email ? accounts[email.toLowerCase()] : null;
+  const newToken = generateToken();
+
+  try {
+    const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/insert_token", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON,
+        "Authorization": "Bearer " + SUPABASE_ANON,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ p_token: newToken, p_email: email })
+    });
+
+    if (!res.ok){
+      const errText = await res.text();
+      throw new Error("Supabase insert failed: " + errText);
     }
 
+    if (acc){
+      acc.token = newToken;
+      acc.purchased = true;
+      saveAccounts(accounts);
+      document.getElementById("modalToken").textContent = newToken;
+    }
+
+    stepLoad.style.display = "none";
+    stepDone.style.display = "block";
     const btn = document.getElementById("downloadBtn");
     btn.href = CONFIG.jarPath;
     btn.setAttribute("download", CONFIG.downloadName);
-  }, 1600);
+
+  } catch (err){
+    console.error("Supabase error:", err);
+    stepLoad.style.display = "none";
+    stepForm.style.display = "block";
+    alert("Could not save your token: " + err.message);
+  }
 });
 
 const lightbox   = document.getElementById("lightbox");
