@@ -104,7 +104,7 @@
   .overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(2,4,8,.82);backdrop-filter:blur(6px);padding:20px;overflow-y:auto}
   .overlay.on{display:flex}
   .modal{width:100%;max-width:440px;background:#080e18;border:1px solid rgba(0,240,255,.35);clip-path:polygon(20px 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%,0 20px);padding:36px 30px;box-shadow:0 0 80px rgba(0,240,255,.2);animation:pop .25s ease;margin:auto}
-  .modal.wide{max-width:520px}
+  .modal.wide{max-width:560px}
   .modal h3{font-family:'Orbitron',sans-serif;letter-spacing:.12em;font-size:1.05rem;margin-bottom:6px;color:#fff}
   .modal p.hint{color:#7f9caf;font-size:.92rem;margin-bottom:22px;line-height:1.5}
   .field{width:100%;padding:14px 16px;margin-bottom:12px;background:#04080f;border:1px solid var(--line);color:#dff6ff;font-family:'Rajdhani',sans-serif;font-size:1rem;outline:none}
@@ -413,33 +413,47 @@
 
 <div class="overlay" id="adminOverlay">
   <div class="modal wide">
-    <h3>ADMIN — GENERATE KEY</h3>
-    <p class="hint">Create a token for a specific Minecraft username with custom duration.</p>
+    <div class="auth-tabs">
+      <button id="tabAdminGenerate" class="on" type="button">GENERATE</button>
+      <button id="tabAdminList" type="button">VIEW TOKENS</button>
+    </div>
 
-    <input class="field" id="adminUsername" type="text" placeholder="Minecraft username (IGN)" maxlength="16">
-    <input class="field" id="adminEmail" type="email" placeholder="Email (optional)">
-    <select class="field" id="adminDuration">
-      <option value="30">30 days (default)</option>
-      <option value="90">90 days</option>
-      <option value="180">180 days</option>
-      <option value="365">1 year</option>
-      <option value="never">Never expires</option>
-      <option value="custom">Custom…</option>
-    </select>
-    <input class="field" id="adminCustomDays" type="number" min="1" placeholder="Custom days" style="display:none">
+    <div id="adminGenerateView">
+      <h3>ADMIN — GENERATE KEY</h3>
+      <p class="hint">Create a token for a specific Minecraft username.</p>
 
-    <div class="field-msg" id="adminMsg"></div>
+      <input class="field" id="adminUsername" type="text" placeholder="Minecraft username (IGN)" maxlength="16">
+      <input class="field" id="adminEmail" type="email" placeholder="Email (optional)">
+      <select class="field" id="adminDuration">
+        <option value="30">30 days (default)</option>
+        <option value="90">90 days</option>
+        <option value="180">180 days</option>
+        <option value="365">1 year</option>
+        <option value="never">Never expires</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <input class="field" id="adminCustomDays" type="number" min="1" placeholder="Custom days" style="display:none">
 
-    <button class="btn full" id="adminGenerateBtn" type="button">Generate Key</button>
+      <div class="field-msg" id="adminMsg"></div>
 
-    <div id="adminResult" style="display:none;margin-top:20px">
-      <div class="token-box">
-        <div class="token-label">GENERATED TOKEN</div>
-        <div class="token-value" id="adminResultToken">—</div>
-        <div class="token-meta" id="adminResultMeta"></div>
-        <button class="btn sm full" id="adminCopyBtn" type="button" style="margin-top:12px">Copy</button>
+      <button class="btn full" id="adminGenerateBtn" type="button">Generate Key</button>
+
+      <div id="adminResult" style="display:none;margin-top:20px">
+        <div class="token-box">
+          <div class="token-label">GENERATED TOKEN</div>
+          <div class="token-value" id="adminResultToken">—</div>
+          <div class="token-meta" id="adminResultMeta"></div>
+          <button class="btn sm full" id="adminCopyBtn" type="button" style="margin-top:12px">Copy</button>
+        </div>
+        <div class="info-box good">✓ Token saved to Supabase.</div>
       </div>
-      <div class="info-box good">✓ Token saved to Supabase.</div>
+    </div>
+
+    <div id="adminListView" style="display:none">
+      <h3>ALL TOKENS</h3>
+      <p class="hint">Every token issued by purchase or admin.</p>
+      <div id="adminTokenList" style="max-height:400px;overflow-y:auto"></div>
+      <button class="btn sm full" id="adminRefreshBtn" type="button" style="margin-top:12px">Refresh</button>
     </div>
 
     <button class="close" id="closeAdminBtn" type="button">Close</button>
@@ -798,19 +812,37 @@ document.getElementById("payBtn").addEventListener("click", async () => {
   }
 });
 
+/* -------- ADMIN PANEL -------- */
 const adminOverlay = document.getElementById("adminOverlay");
 
 document.getElementById("adminBtn").addEventListener("click", () => {
   adminOverlay.classList.add("on");
   document.getElementById("adminResult").style.display = "none";
   document.getElementById("adminMsg").textContent = "";
+  switchAdmin("generate");
 });
 
 document.getElementById("closeAdminBtn").addEventListener("click", () => adminOverlay.classList.remove("on"));
+adminOverlay.addEventListener("click", e => { if (e.target === adminOverlay) adminOverlay.classList.remove("on"); });
+
+function switchAdmin(view){
+  const genTab = document.getElementById("tabAdminGenerate");
+  const listTab = document.getElementById("tabAdminList");
+  const genView = document.getElementById("adminGenerateView");
+  const listView = document.getElementById("adminListView");
+  genTab.classList.toggle("on", view === "generate");
+  listTab.classList.toggle("on", view === "list");
+  genView.style.display = view === "generate" ? "block" : "none";
+  listView.style.display = view === "list" ? "block" : "none";
+  if (view === "list") loadTokenList();
+}
+
+document.getElementById("tabAdminGenerate").addEventListener("click", () => switchAdmin("generate"));
+document.getElementById("tabAdminList").addEventListener("click", () => switchAdmin("list"));
+document.getElementById("adminRefreshBtn").addEventListener("click", loadTokenList);
 
 document.getElementById("adminDuration").addEventListener("change", e => {
-  const custom = e.target.value === "custom";
-  document.getElementById("adminCustomDays").style.display = custom ? "block" : "none";
+  document.getElementById("adminCustomDays").style.display = e.target.value === "custom" ? "block" : "none";
 });
 
 document.getElementById("adminGenerateBtn").addEventListener("click", async () => {
@@ -853,10 +885,7 @@ document.getElementById("adminGenerateBtn").addEventListener("click", async () =
         p_expires_at: expiresAt
       })
     });
-    if (!res.ok){
-      const errText = await res.text();
-      throw new Error(errText);
-    }
+    if (!res.ok) throw new Error(await res.text());
 
     document.getElementById("adminResultToken").textContent = newToken;
     document.getElementById("adminResultMeta").innerHTML =
@@ -865,12 +894,59 @@ document.getElementById("adminGenerateBtn").addEventListener("click", async () =
       "<div>Expires: <b>" + formatDate(expiresAt) + "</b></div>";
     document.getElementById("adminResult").style.display = "block";
   } catch(err){
-    console.error(err);
     msg.textContent = "Error: " + err.message;
   } finally {
     btn.disabled = false; btn.textContent = orig;
   }
 });
+
+async function loadTokenList(){
+  const container = document.getElementById("adminTokenList");
+  container.innerHTML = '<div style="text-align:center;color:#7f9caf;padding:20px">Loading…</div>';
+
+  try {
+    const res = await fetch(SUPABASE_URL + "/rest/v1/rpc/admin_list_tokens", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_ANON,
+        "Authorization": "Bearer " + SUPABASE_ANON,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ p_admin_key: ADMIN_KEY })
+    });
+    if (!res.ok) throw new Error(await res.text());
+
+    const tokens = await res.json();
+    if (!tokens || tokens.length === 0){
+      container.innerHTML = '<div style="text-align:center;color:#7f9caf;padding:20px">No tokens yet.</div>';
+      return;
+    }
+
+    const now = new Date();
+    container.innerHTML = tokens.map(t => {
+      const expired = t.expires_at && new Date(t.expires_at) < now;
+      const expLabel = t.expires_at ? formatDate(t.expires_at) : "Never";
+      const badge = !t.active
+        ? '<span style="color:#ff4d6d">INACTIVE</span>'
+        : expired
+          ? '<span style="color:#ff4d6d">EXPIRED</span>'
+          : '<span style="color:#00ff8c">ACTIVE</span>';
+
+      return `
+        <div class="token-box" style="margin:10px 0">
+          <div class="token-value" style="font-size:.85rem;margin-bottom:8px">${t.token}</div>
+          <div class="token-meta">
+            <div>User: <b>${t.minecraft_username || "—"}</b> ${badge}</div>
+            <div>Email: <b>${t.email || "—"}</b></div>
+            <div>Expires: <b>${expLabel}</b></div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } catch(err){
+    container.innerHTML = '<div style="color:#ff4d6d;text-align:center;padding:20px">Error: ' + err.message + '</div>';
+  }
+}
 
 document.getElementById("adminCopyBtn").addEventListener("click", () => {
   const t = document.getElementById("adminResultToken").textContent;
@@ -881,8 +957,7 @@ document.getElementById("adminCopyBtn").addEventListener("click", () => {
   }
 });
 
-adminOverlay.addEventListener("click", e => { if (e.target === adminOverlay) adminOverlay.classList.remove("on"); });
-
+/* -------- LIGHTBOX -------- */
 const lightbox = document.getElementById("lightbox");
 const lbContent = document.getElementById("lbContent");
 const lbCaption = document.getElementById("lbCaption");
