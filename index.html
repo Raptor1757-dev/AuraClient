@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noarchive, nosnippet">
-<title>Aura Client — Minecraft 1.21.11 Fabric</title>
+<title>Aura Client — Free Minecraft 1.21.11 Fabric</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
@@ -54,6 +54,7 @@
   .sub{margin:24px auto 0;max-width:640px;font-size:1.15rem;color:#93b3c6;line-height:1.6}
   .badges{display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap}
   .badge{font-family:'Orbitron',sans-serif;font-size:.68rem;letter-spacing:.18em;padding:6px 14px;border:1px solid var(--line);border-radius:999px;color:#9fd8e6;background:rgba(0,240,255,.04)}
+  .badge.free{border-color:rgba(0,255,140,.5);color:#a8f5c8;background:rgba(0,255,140,.08)}
   .cta{margin-top:36px;display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
   .btn{font-family:'Orbitron',sans-serif;font-weight:700;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:none;padding:16px 34px;color:#020a10;background:linear-gradient(135deg,var(--cyan),var(--violet));clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px);box-shadow:0 0 24px rgba(0,240,255,.35);transition:.22s;display:inline-block;user-select:none}
   .btn:hover{transform:translateY(-2px);box-shadow:0 0 42px rgba(0,240,255,.7)}
@@ -61,6 +62,8 @@
   .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
   .btn.ghost{background:transparent;color:var(--cyan);box-shadow:inset 0 0 0 1px var(--line)}
   .btn.ghost:hover{background:rgba(0,240,255,.08);box-shadow:inset 0 0 0 1px var(--cyan),0 0 30px rgba(0,240,255,.25)}
+  .btn.free{background:linear-gradient(135deg,#00ff8c,#00f0ff);box-shadow:0 0 24px rgba(0,255,140,.4)}
+  .btn.free:hover{box-shadow:0 0 42px rgba(0,255,140,.7)}
   .btn.danger{background:linear-gradient(135deg,#ff4d6d,#ff8a4d);box-shadow:0 0 24px rgba(255,77,109,.35)}
   .btn.danger:hover{box-shadow:0 0 42px rgba(255,77,109,.65)}
   .btn.sm{padding:11px 22px;font-size:.7rem}
@@ -94,13 +97,13 @@
   .clip .meta{padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
   .clip .meta h4{font-family:'Orbitron',sans-serif;font-size:.78rem;letter-spacing:.12em;color:#dff6ff}
   .clip .meta span{font-size:.78rem;color:var(--cyan);letter-spacing:.1em}
-  .price-card{max-width:420px;margin:0 auto;text-align:center;padding:44px 32px;background:linear-gradient(180deg,rgba(0,240,255,.09),rgba(122,92,255,.06));border:1px solid rgba(0,240,255,.35);clip-path:polygon(22px 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%,0 22px);box-shadow:0 0 60px rgba(0,240,255,.12)}
-  .price-card .plan{font-family:'Orbitron',sans-serif;letter-spacing:.22em;font-size:.8rem;color:var(--cyan)}
-  .price{font-family:'Orbitron',sans-serif;font-size:3.4rem;font-weight:900;margin:16px 0 4px;color:#fff;text-shadow:0 0 30px rgba(0,240,255,.5)}
+  .price-card{max-width:420px;margin:0 auto;text-align:center;padding:44px 32px;background:linear-gradient(180deg,rgba(0,255,140,.09),rgba(0,240,255,.06));border:1px solid rgba(0,255,140,.35);clip-path:polygon(22px 0,100% 0,100% calc(100% - 22px),calc(100% - 22px) 100%,0 100%,0 22px);box-shadow:0 0 60px rgba(0,255,140,.15)}
+  .price-card .plan{font-family:'Orbitron',sans-serif;letter-spacing:.22em;font-size:.8rem;color:#00ff8c}
+  .price{font-family:'Orbitron',sans-serif;font-size:3.4rem;font-weight:900;margin:16px 0 4px;color:#fff;text-shadow:0 0 30px rgba(0,255,140,.5)}
   .price small{font-size:1rem;color:#7f9caf;font-weight:500}
   .perks{list-style:none;margin:26px 0 30px;text-align:left;display:inline-block}
   .perks li{padding:7px 0;color:#a8c6d6;font-weight:600}
-  .perks li::before{content:"▸ ";color:var(--cyan)}
+  .perks li::before{content:"▸ ";color:#00ff8c}
   .overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;background:rgba(2,4,8,.82);backdrop-filter:blur(6px);padding:20px;overflow-y:auto}
   .overlay.on{display:flex}
   .modal{width:100%;max-width:440px;background:#080e18;border:1px solid rgba(0,240,255,.35);clip-path:polygon(20px 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%,0 20px);padding:36px 30px;box-shadow:0 0 80px rgba(0,240,255,.2);animation:pop .25s ease;margin:auto}
@@ -200,7 +203,7 @@
       <div class="ok">✔</div>
       <h3>ACCOUNT CREATED</h3>
       <p class="hint">Welcome, <b id="auDoneEmail" style="color:var(--cyan)"></b></p>
-      <p class="hint">Purchase Aura Client to receive your login token.</p>
+      <p class="hint">Get your free 1-hour token anytime from the site.</p>
       <button class="btn full" id="enterSiteBtn" type="button">Continue</button>
     </div>
 
@@ -224,7 +227,7 @@
       <a data-nav="home" id="navHome">Home</a>
       <a data-nav="gallery" id="navGallery">Gallery</a>
       <a data-nav="clips" id="navClips">Clips</a>
-      <a data-nav="pricing" id="navPricing">Pricing</a>
+      <a data-nav="pricing" id="navPricing">Free Token</a>
     </div>
     <div class="nav-right">
       <span class="admin-badge" id="adminBtn" style="display:none" title="Admin Panel">ADMIN</span>
@@ -241,14 +244,14 @@
   <header class="wrap">
     <span class="tag">MINECRAFT 1.21.11 · FABRIC</span>
     <h1>AURA CLIENT</h1>
-    <p class="sub">A next‑gen Fabric client for Minecraft 1.21.11 — built for speed, style and total control.</p>
+    <p class="sub">Free Minecraft Fabric client — get a 1-hour access token instantly.</p>
     <div class="badges">
-      <span class="badge">1.21.11</span>
-      <span class="badge">FABRIC</span>
-      <span class="badge">LIFETIME UPDATES</span>
+      <span class="badge free">FREE</span>
+      <span class="badge">1 HOUR ACCESS</span>
+      <span class="badge">FABRIC 1.21.11</span>
     </div>
     <div class="cta">
-      <button class="btn" id="buyHomeBtn" type="button">Buy Now</button>
+      <button class="btn free" id="buyHomeBtn" type="button">Get Free Token</button>
       <button class="btn ghost" id="showTokenHomeBtn" type="button">My Token</button>
     </div>
   </header>
@@ -261,7 +264,7 @@
       <div class="card link" id="featClips"><div class="ico">🎬</div><h3>CLIPS</h3><p>Watch gameplay and showcase footage of Aura Client in action.</p></div>
       <div class="card"><div class="ico">🖥️</div><h3>CUSTOM HUD</h3><p>CPS, FPS, keystrokes, ping and coordinates — fully draggable.</p></div>
       <div class="card"><div class="ico">🧵</div><h3>FABRIC 1.21.11</h3><p>Built specifically for Minecraft 1.21.11 on the Fabric loader.</p></div>
-      <div class="card"><div class="ico">🔑</div><h3>TOKEN LOGIN</h3><p>Your unique token keeps your Aura Client secure and personal.</p></div>
+      <div class="card"><div class="ico">🔑</div><h3>FREE TOKEN</h3><p>Generate a 1-hour token instantly — no payment required.</p></div>
     </div>
   </section>
 </div>
@@ -283,7 +286,7 @@
     </div>
     <div class="cta" style="margin-top:50px">
       <button class="btn ghost" id="backHome1" type="button">← Back to Features</button>
-      <button class="btn" id="buyGalleryBtn" type="button">Buy Now</button>
+      <button class="btn free" id="buyGalleryBtn" type="button">Get Free Token</button>
     </div>
   </section>
 </div>
@@ -312,28 +315,28 @@
     </div>
     <div class="cta" style="margin-top:20px">
       <button class="btn ghost" id="backHome2" type="button">← Back to Features</button>
-      <button class="btn" id="buyClipsBtn" type="button">Buy Now</button>
+      <button class="btn free" id="buyClipsBtn" type="button">Get Free Token</button>
     </div>
   </section>
 </div>
 
 <div class="page" id="page-pricing">
   <header class="wrap compact">
-    <span class="tag">PRICING</span>
+    <span class="tag">FREE</span>
     <h1 class="small">GET AURA</h1>
-    <p class="sub">One payment. 30 days access.</p>
+    <p class="sub">Free client. 1-hour token. No payment.</p>
   </header>
   <section class="wrap">
     <div class="price-card">
-      <div class="plan">AURA CLIENT · 1.21.11 FABRIC</div>
-      <div class="price" id="priceLabel">5.99<small> €</small></div>
+      <div class="plan">AURA CLIENT · FABRIC</div>
+      <div class="price">FREE<small> · 1h</small></div>
       <ul class="perks">
         <li>Full client (.jar)</li>
         <li>Fabric 1.21.11</li>
-        <li>30 days access</li>
+        <li>1-hour access token</li>
         <li>Instant download</li>
       </ul>
-      <button class="btn full" id="buyPricingBtn" type="button">Purchase</button>
+      <button class="btn free full" id="buyPricingBtn" type="button">Get Free Token</button>
     </div>
   </section>
 </div>
@@ -351,30 +354,29 @@
 <div class="overlay" id="overlay">
   <div class="modal">
     <div id="stepForm">
-      <h3>SECURE CHECKOUT</h3>
-      <p class="hint">Enter your Minecraft username and confirm your order.</p>
+      <h3>GET FREE TOKEN</h3>
+      <p class="hint">Enter your Minecraft username to receive a free 1-hour token.</p>
       <div class="info-box" id="checkoutUser"></div>
       <input class="field" id="checkoutUsername" type="text" placeholder="Minecraft username (IGN)" maxlength="16">
       <div class="field-msg" id="checkoutUsernameMsg"></div>
-      <input class="field" id="card" type="text" placeholder="Card number (demo)">
-      <button class="btn full" id="payBtn" type="button">Pay <span class="js-price-inline"></span></button>
+      <button class="btn free full" id="payBtn" type="button">Generate Token</button>
       <button class="close" id="cancelBtn" type="button">Cancel</button>
     </div>
     <div id="stepLoad" style="display:none">
-      <h3>PROCESSING</h3>
-      <p class="hint">Verifying payment…</p>
+      <h3>GENERATING</h3>
+      <p class="hint">Creating your token…</p>
       <div class="spinner"></div>
     </div>
     <div id="stepDone" style="display:none;text-align:center">
       <div class="ok">✔</div>
-      <h3>PURCHASE COMPLETE</h3>
-      <p class="hint">Thanks! Your download is ready.</p>
+      <h3>TOKEN READY</h3>
+      <p class="hint">Valid for 1 hour.</p>
       <div class="token-box">
         <div class="token-label">YOUR CLIENT TOKEN</div>
         <div class="token-value" id="modalToken">—</div>
         <div class="token-meta" id="modalTokenMeta"></div>
         <button class="btn sm full" id="copyTokenModalBtn" type="button" style="margin-top:12px">Copy Token</button>
-        <div class="token-hint">Save this token — you'll need it to log in to the Aura Client.</div>
+        <div class="token-hint">Enter this token in the Aura Client to log in.</div>
       </div>
       <a class="btn full" id="downloadBtn" href="#" download style="display:block;margin-top:14px">Download .jar</a>
       <button class="close" id="closeBtn" type="button">Close</button>
@@ -403,9 +405,9 @@
       <div class="token-empty">
         <span class="big">🔒</span>
         You don't have a token yet.<br>
-        <span style="color:#7f9caf;font-size:.85rem">Purchase Aura Client to receive your login token.</span>
+        <span style="color:#7f9caf;font-size:.85rem">Click below to generate a free 1-hour token.</span>
       </div>
-      <button class="btn sm full" id="goBuyBtn" type="button">Buy Now</button>
+      <button class="btn sm full" id="goBuyBtn" type="button">Get Free Token</button>
     </div>
     <button class="close" id="closeTokenBtn" type="button">Close</button>
   </div>
@@ -425,7 +427,9 @@
       <input class="field" id="adminUsername" type="text" placeholder="Minecraft username (IGN)" maxlength="16">
       <input class="field" id="adminEmail" type="email" placeholder="Email (optional)">
       <select class="field" id="adminDuration">
-        <option value="30">30 days (default)</option>
+        <option value="1">1 hour (default)</option>
+        <option value="24">1 day</option>
+        <option value="30">30 days</option>
         <option value="90">90 days</option>
         <option value="180">180 days</option>
         <option value="365">1 year</option>
@@ -451,7 +455,7 @@
 
     <div id="adminListView" style="display:none">
       <h3>ALL TOKENS</h3>
-      <p class="hint">Every token issued by purchase or admin.</p>
+      <p class="hint">Every token issued.</p>
       <div id="adminTokenList" style="max-height:400px;overflow-y:auto"></div>
       <button class="btn sm full" id="adminRefreshBtn" type="button" style="margin-top:12px">Refresh</button>
     </div>
@@ -477,10 +481,7 @@
 <script>
 const CONFIG = {
   jarPath: "Aura-Client.jar",
-  downloadName: "Aura-Client.jar",
-  price: "5.99",
-  currency: "€",
-  currencyPos: "after"
+  downloadName: "Aura-Client.jar"
 };
 
 const ADMIN_EMAILS = ["raptor1757@proton.me"];
@@ -493,13 +494,6 @@ const EMAIL_MODE = "real";
 
 const SUPABASE_URL  = "https://tkdiwdywukvwvgerzhxh.supabase.co";
 const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRrZGl3ZHl3dWt2d3ZnZXJ6aHhoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NzE3NDAsImV4cCI6MjEwNzE0Nzc0MH0.iLutB8PaS9U0SWAwzSqUwa2rA6rAWxodybAAlGaZXJA";
-
-document.getElementById("priceLabel").innerHTML =
-  CONFIG.currencyPos === "before"
-    ? CONFIG.currency + CONFIG.price
-    : CONFIG.price + "<small> " + CONFIG.currency + "</small>";
-document.querySelector(".js-price-inline").textContent =
-  CONFIG.currencyPos === "before" ? CONFIG.currency + CONFIG.price : CONFIG.price + " " + CONFIG.currency;
 
 if (EMAIL_MODE === "real" && typeof emailjs !== "undefined") {
   try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch(e){}
@@ -542,7 +536,7 @@ function generateToken(){
 function formatDate(iso){
   if (!iso) return "Never expires";
   const d = new Date(iso);
-  return d.toLocaleDateString("en-GB", { year:"numeric", month:"short", day:"numeric" });
+  return d.toLocaleString("en-GB", { month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -596,8 +590,6 @@ async function sendCode(){
   const orig = btn.textContent;
   btn.disabled = true; btn.textContent = "Sending…";
 
-  if (EMAIL_MODE === "demo"){ document.getElementById("auSentTo").textContent = email; auStep1.style.display = "none"; auStep2.style.display = "block"; startResendTimer(); btn.disabled = false; btn.textContent = orig; alert("DEMO — code: " + pendingCode); return; }
-
   try {
     await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: email, code: pendingCode });
     document.getElementById("auSentTo").textContent = email;
@@ -643,7 +635,7 @@ function verifyCode(){
 
   const pass = document.getElementById("auPass").value;
   const accounts = getAccounts();
-  accounts[pendingEmail.toLowerCase()] = { email: pendingEmail, pass, token: null, minecraft_username: null, expires_at: null, purchased: false, created: Date.now() };
+  accounts[pendingEmail.toLowerCase()] = { email: pendingEmail, pass, token: null, minecraft_username: null, expires_at: null, created: Date.now() };
   saveAccounts(accounts);
   setSession(pendingEmail);
   document.getElementById("auDoneEmail").textContent = pendingEmail;
@@ -683,9 +675,10 @@ function showTokenModal(){
     subtitle.textContent = "Use this token to log in to the Aura Client.";
     document.getElementById("modalTokenView").textContent = acc.token;
     const meta = document.getElementById("modalTokenMetaView");
+    const expired = acc.expires_at && new Date(acc.expires_at) < new Date();
     meta.innerHTML =
       "<div>Bound to: <b>" + (acc.minecraft_username || "—") + "</b></div>" +
-      "<div>Expires: <b>" + formatDate(acc.expires_at) + "</b></div>";
+      "<div>Expires: <b>" + formatDate(acc.expires_at) + "</b>" + (expired ? ' <span style="color:#ff4d6d">(EXPIRED)</span>' : '') + "</div>";
   } else {
     hasState.style.display = "none";
     emptyState.style.display = "block";
@@ -780,18 +773,14 @@ document.getElementById("payBtn").addEventListener("click", async () => {
       },
       body: JSON.stringify({ p_token: newToken, p_email: email, p_username: username })
     });
-    if (!res.ok){
-      const errText = await res.text();
-      throw new Error(errText);
-    }
+    if (!res.ok) throw new Error(await res.text());
 
-    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
 
     if (acc){
       acc.token = newToken;
       acc.minecraft_username = username;
       acc.expires_at = expiresAt;
-      acc.purchased = true;
       saveAccounts(accounts);
       document.getElementById("modalToken").textContent = newToken;
       document.getElementById("modalTokenMeta").innerHTML =
@@ -808,11 +797,10 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     console.error(err);
     stepLoad.style.display = "none";
     stepForm.style.display = "block";
-    alert("Could not save your token: " + err.message);
+    alert("Could not generate token: " + err.message);
   }
 });
 
-/* -------- ADMIN PANEL -------- */
 const adminOverlay = document.getElementById("adminOverlay");
 
 document.getElementById("adminBtn").addEventListener("click", () => {
@@ -860,6 +848,8 @@ document.getElementById("adminGenerateBtn").addEventListener("click", async () =
   else if (duration === "custom"){
     if (!customDays || customDays < 1){ msg.textContent = "Enter a valid number of days."; return; }
     expiresAt = new Date(Date.now() + customDays * 24 * 60 * 60 * 1000).toISOString();
+  } else if (duration === "1") {
+    expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
   } else {
     expiresAt = new Date(Date.now() + parseInt(duration,10) * 24 * 60 * 60 * 1000).toISOString();
   }
@@ -957,7 +947,6 @@ document.getElementById("adminCopyBtn").addEventListener("click", () => {
   }
 });
 
-/* -------- LIGHTBOX -------- */
 const lightbox = document.getElementById("lightbox");
 const lbContent = document.getElementById("lbContent");
 const lbCaption = document.getElementById("lbCaption");
