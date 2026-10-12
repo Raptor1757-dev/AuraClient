@@ -203,7 +203,7 @@
       <div class="ok">✔</div>
       <h3>ACCOUNT CREATED</h3>
       <p class="hint">Welcome, <b id="auDoneEmail" style="color:var(--cyan)"></b></p>
-      <p class="hint">Get your free 1-hour token anytime from the site.</p>
+      <p class="hint">Get your free 1-hour token anytime from the site. One token per week per username.</p>
       <button class="btn full" id="enterSiteBtn" type="button">Continue</button>
     </div>
 
@@ -244,11 +244,11 @@
   <header class="wrap">
     <span class="tag">MINECRAFT 1.21.11 · FABRIC</span>
     <h1>AURA CLIENT</h1>
-    <p class="sub">Free Minecraft Fabric client — get a 1-hour access token instantly.</p>
+    <p class="sub">Free Minecraft Fabric client — get a 1-hour access token. One token per week per username.</p>
     <div class="badges">
       <span class="badge free">FREE</span>
       <span class="badge">1 HOUR ACCESS</span>
-      <span class="badge">FABRIC 1.21.11</span>
+      <span class="badge">WEEKLY RESET</span>
     </div>
     <div class="cta">
       <button class="btn free" id="buyHomeBtn" type="button">Get Free Token</button>
@@ -264,7 +264,7 @@
       <div class="card link" id="featClips"><div class="ico">🎬</div><h3>CLIPS</h3><p>Watch gameplay and showcase footage of Aura Client in action.</p></div>
       <div class="card"><div class="ico">🖥️</div><h3>CUSTOM HUD</h3><p>CPS, FPS, keystrokes, ping and coordinates — fully draggable.</p></div>
       <div class="card"><div class="ico">🧵</div><h3>FABRIC 1.21.11</h3><p>Built specifically for Minecraft 1.21.11 on the Fabric loader.</p></div>
-      <div class="card"><div class="ico">🔑</div><h3>FREE TOKEN</h3><p>Generate a 1-hour token instantly — no payment required.</p></div>
+      <div class="card"><div class="ico">🔑</div><h3>FREE TOKEN</h3><p>1-hour token, once per week per Minecraft username.</p></div>
     </div>
   </section>
 </div>
@@ -324,7 +324,7 @@
   <header class="wrap compact">
     <span class="tag">FREE</span>
     <h1 class="small">GET AURA</h1>
-    <p class="sub">Free client. 1-hour token. No payment.</p>
+    <p class="sub">Free client. 1-hour token. One per week per username.</p>
   </header>
   <section class="wrap">
     <div class="price-card">
@@ -334,7 +334,7 @@
         <li>Full client (.jar)</li>
         <li>Fabric 1.21.11</li>
         <li>1-hour access token</li>
-        <li>Instant download</li>
+        <li>1 token per week per username</li>
       </ul>
       <button class="btn free full" id="buyPricingBtn" type="button">Get Free Token</button>
     </div>
@@ -355,7 +355,7 @@
   <div class="modal">
     <div id="stepForm">
       <h3>GET FREE TOKEN</h3>
-      <p class="hint">Enter your Minecraft username to receive a free 1-hour token.</p>
+      <p class="hint">Enter your Minecraft username to receive a free 1-hour token. One per week per username.</p>
       <div class="info-box" id="checkoutUser"></div>
       <input class="field" id="checkoutUsername" type="text" placeholder="Minecraft username (IGN)" maxlength="16">
       <div class="field-msg" id="checkoutUsernameMsg"></div>
@@ -370,7 +370,7 @@
     <div id="stepDone" style="display:none;text-align:center">
       <div class="ok">✔</div>
       <h3>TOKEN READY</h3>
-      <p class="hint">Valid for 1 hour.</p>
+      <p class="hint">Valid for 1 hour. Next token available in 7 days.</p>
       <div class="token-box">
         <div class="token-label">YOUR CLIENT TOKEN</div>
         <div class="token-value" id="modalToken">—</div>
@@ -755,6 +755,18 @@ document.getElementById("payBtn").addEventListener("click", async () => {
   document.getElementById("checkoutUsername").classList.remove("err");
   umsg.textContent = "";
 
+  // Client-side weekly check
+  const lastGen = localStorage.getItem("aura_last_gen_" + username.toLowerCase());
+  if (lastGen){
+    const since = Date.now() - parseInt(lastGen, 10);
+    const week = 7 * 24 * 60 * 60 * 1000;
+    if (since < week){
+      const daysLeft = Math.ceil((week - since) / (24 * 60 * 60 * 1000));
+      umsg.textContent = "You already generated a token this week. Try again in " + daysLeft + " day(s).";
+      return;
+    }
+  }
+
   stepForm.style.display = "none";
   stepLoad.style.display = "block";
 
@@ -773,7 +785,12 @@ document.getElementById("payBtn").addEventListener("click", async () => {
       },
       body: JSON.stringify({ p_token: newToken, p_email: email, p_username: username })
     });
-    if (!res.ok) throw new Error(await res.text());
+    if (!res.ok) {
+      const errText = await res.text();
+      let msg = errText;
+      try { const j = JSON.parse(errText); msg = j.message || errText; } catch(e){}
+      throw new Error(msg);
+    }
 
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
 
@@ -785,8 +802,12 @@ document.getElementById("payBtn").addEventListener("click", async () => {
       document.getElementById("modalToken").textContent = newToken;
       document.getElementById("modalTokenMeta").innerHTML =
         "<div>Bound to: <b>" + username + "</b></div>" +
-        "<div>Expires: <b>" + formatDate(expiresAt) + "</b></div>";
+        "<div>Expires: <b>" + formatDate(expiresAt) + "</b></div>" +
+        "<div>Next token: <b>in 7 days</b></div>";
     }
+
+    // Save local cooldown
+    localStorage.setItem("aura_last_gen_" + username.toLowerCase(), Date.now().toString());
 
     stepLoad.style.display = "none";
     stepDone.style.display = "block";
@@ -797,7 +818,7 @@ document.getElementById("payBtn").addEventListener("click", async () => {
     console.error(err);
     stepLoad.style.display = "none";
     stepForm.style.display = "block";
-    alert("Could not generate token: " + err.message);
+    umsg.textContent = err.message;
   }
 });
 
